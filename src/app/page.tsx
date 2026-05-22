@@ -17,6 +17,7 @@ export default function Home() {
   const [status, setStatus] = useState<DbStatus | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [sessionStatus, setSessionStatus] = useState<string | null>(null);
+  const [slowQueryStatus, setSlowQueryStatus] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +83,25 @@ export default function Home() {
       );
     } catch {
       setSessionStatus("Session validation failed");
+    }
+  }
+
+  async function runSlowQuery() {
+    setSlowQueryStatus("Running slow query...");
+
+    try {
+      const response = await fetch("/api/db/slow-query", {
+        cache: "no-store",
+      });
+      const data = (await response.json()) as { ok?: boolean };
+
+      setSlowQueryStatus(
+        response.ok && data.ok
+          ? "Slow query completed"
+          : "Slow query failed",
+      );
+    } catch {
+      setSlowQueryStatus("Slow query failed");
     }
   }
 
@@ -169,6 +189,22 @@ export default function Home() {
           </button>
           {sessionStatus ? (
             <p className="mt-3 text-sm text-slate-300">{sessionStatus}</p>
+          ) : null}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
+          <div className="mb-3 text-sm uppercase tracking-[0.25em] text-slate-500">
+            Postgres timeout test
+          </div>
+          <button
+            type="button"
+            onClick={runSlowQuery}
+            className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Run slow query
+          </button>
+          {slowQueryStatus ? (
+            <p className="mt-3 text-sm text-slate-300">{slowQueryStatus}</p>
           ) : null}
         </div>
       </section>
