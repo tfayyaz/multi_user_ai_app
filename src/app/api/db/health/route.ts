@@ -17,6 +17,7 @@ export async function GET() {
     const sql = neon(databaseUrl);
     const [row] = await sql`
       select current_database() as database, now() as server_time
+      from monitoring_cuj_missing_table
     `;
 
     return NextResponse.json({
@@ -24,7 +25,9 @@ export async function GET() {
       database: row.database,
       serverTime: row.server_time,
     });
-  } catch {
+  } catch (error) {
+    console.error("Database health check failed", error);
+
     return NextResponse.json(
       { connected: false, error: "Unable to connect to Neon" },
       { status: 500 },
