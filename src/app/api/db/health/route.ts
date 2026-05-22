@@ -17,7 +17,6 @@ export async function GET() {
     const sql = neon(databaseUrl);
     const [row] = await sql`
       select current_database() as database, now() as server_time
-      from monitoring_cuj_missing_table
     `;
 
     return NextResponse.json({
