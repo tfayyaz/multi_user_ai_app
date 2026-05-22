@@ -207,6 +207,18 @@ export default function Home() {
             <p className="mt-3 text-sm text-slate-300">{slowQueryStatus}</p>
           ) : null}
         </div>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
+          <div className="mb-3 text-sm uppercase tracking-[0.25em] text-slate-500">
+            Drizzle schema mismatch test
+          </div>
+          <a
+            href="/api/drizzle/progress"
+            className="inline-flex rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Run Drizzle insert
+          </a>
+        </div>
       </section>
     </main>
   );
