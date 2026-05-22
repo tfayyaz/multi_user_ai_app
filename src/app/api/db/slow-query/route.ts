@@ -16,8 +16,10 @@ export async function GET() {
   try {
     const sql = neon(databaseUrl);
 
-    await sql`SET statement_timeout = '1000ms'`;
-    await sql`SELECT pg_sleep(5)`;
+    await sql.transaction((txn) => [
+      txn`SET LOCAL statement_timeout = '1000ms'`,
+      txn`SELECT pg_sleep(5)`,
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (error) {
