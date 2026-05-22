@@ -15,6 +15,7 @@ type DbStatus =
 
 export default function Home() {
   const [status, setStatus] = useState<DbStatus | null>(null);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +44,26 @@ export default function Home() {
       cancelled = true;
     };
   }, []);
+
+  async function saveProgress() {
+    setSaveStatus("Saving progress...");
+
+    try {
+      const response = await fetch("/api/progress", {
+        method: "POST",
+        cache: "no-store",
+      });
+      const data = (await response.json()) as { saved?: boolean };
+
+      setSaveStatus(
+        data.saved
+          ? "Progress saved to leaderboard"
+          : "Progress save failed",
+      );
+    } catch {
+      setSaveStatus("Progress save failed");
+    }
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 py-16 text-white">
@@ -97,6 +118,22 @@ export default function Home() {
               <p className="text-sm text-slate-400">{status.error}</p>
             </div>
           )}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
+          <div className="mb-3 text-sm uppercase tracking-[0.25em] text-slate-500">
+            Progress write test
+          </div>
+          <button
+            type="button"
+            onClick={saveProgress}
+            className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Save progress
+          </button>
+          {saveStatus ? (
+            <p className="mt-3 text-sm text-slate-300">{saveStatus}</p>
+          ) : null}
         </div>
       </section>
     </main>
