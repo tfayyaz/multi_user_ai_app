@@ -219,6 +219,18 @@ export default function Home() {
             Run Drizzle insert
           </a>
         </div>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
+          <div className="mb-3 text-sm uppercase tracking-[0.25em] text-slate-500">
+            Foreign key violation test
+          </div>
+          <a
+            href="/api/db/foreign-key"
+            className="inline-flex rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Run membership insert
+          </a>
+        </div>
       </section>
     </main>
   );
