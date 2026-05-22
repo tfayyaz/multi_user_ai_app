@@ -18,7 +18,7 @@ export async function GET() {
 
     await sql.transaction((txn) => [
       txn`SET LOCAL statement_timeout = '1000ms'`,
-      txn`SELECT pg_sleep(5)`,
+      txn`SELECT pg_sleep(0.1)`,
     ]);
 
     return NextResponse.json({ ok: true });
